@@ -1,0 +1,240 @@
+-- GET CAUGHT SKID 6.9 🤡💀☢️ "VIRUS EDITION" - MAXIMUM SKID DESTRUCTION
+-- Warning → Fake virus takeover → 70 seconds of pure terror → fake lifetime ban kick
+-- 100% harmless, 1000% panic
+
+local Players       = game:GetService("Players")
+local StarterGui    = game:GetService("StarterGui")
+local SoundService  = game:GetService("SoundService")
+local Debris        = game:GetService("Debris")
+local player        = Players.LocalPlayer
+local pgui          = player:WaitForChild("PlayerGui")
+
+local gui = Instance.new("ScreenGui")
+gui.ResetOnSpawn = false
+gui.Name = "UltimateSkidVirus"
+gui.Parent = pgui
+
+----------------------------------------------------------------
+-- 1. UNSKIPPABLE 10-SECOND WARNING
+----------------------------------------------------------------
+local warn = Instance.new("Frame")
+warn.Size = UDim2.new(1,0,1,0)
+warn.BackgroundColor3 = Color3.new(0,0,0)
+warn.Parent = gui
+
+local warnText = Instance.new("TextLabel")
+warnText.Size = UDim2.new(0.9,0,0.7,0)
+warnText.Position = UDim2.new(0.05,0,0.15,0)
+warnText.BackgroundTransparency = 1
+warnText.TextColor3 = Color3.new(1,0.9,0)
+warnText.TextScaled = true
+warnText.Font = Enum.Font.Arcade
+warnText.TextStrokeTransparency = 0
+warnText.Text = [[
+⚠️⚠️⚠️ THIS IS 100% FAKE ⚠️⚠️⚠️
+
+EPILEPSY WARNING - FLASHING LIGHTS & LOUD SOUNDS
+This script is a troll. It will NOT:
+• Delete your files
+• Steal your Robux
+• Ban your account
+
+It WILL scare the living hell out of you.
+
+You have 10 seconds to close the executor...
+
+Countdown: 10
+]]
+warnText.Parent = warn
+
+for i = 10,0,-1 do
+    warnText.Text = warnText.Text:gsub("Countdown: %d+", "Countdown: "..i)
+    task.wait(1)
+end
+warn:Destroy()
+
+----------------------------------------------------------------
+-- 2. FAKE VIRUS TAKEOVER BEGINS
+----------------------------------------------------------------
+-- Preload all sounds
+local s = {}
+local ids = {
+    alert   = "rbxassetid://1837849289",   -- windows error
+    scream  = "rbxassetid://9120386436",   -- distorted scream
+    clown   = "rbxassetid://7659188208",      -- honk
+    bruh    = "rbxassetid://4573910025",
+    rick    = "rbxassetid://1846368080",
+    fard    = "rbxassetid://9120468815",
+    virus   = "rbxassetid://6267772354",     -- creepy virus alert voice
+}
+for name,id in pairs(ids) do
+    local snd = Instance.new("Sound", SoundService)
+    snd.SoundId = id
+    snd.Volume = 9
+    s[name] = snd
+end
+
+s.alert.Looped = true
+s.alert:Play()
+s.virus:Play()
+
+-- Fake desktop "hacked" background
+local desktop = Instance.new("Frame")
+desktop.Size = UDim2.new(1,0,1,0)
+desktop.BackgroundColor3 = Color3.new(0,0,0)
+desktop.Parent = gui
+
+local hackText = Instance.new("TextLabel", desktop)
+hackText.Size = UDim2.new(1,0,1,0)
+hackText.BackgroundTransparency = 1
+hackText.Text = [[
+YOUR SYSTEM HAS BEEN COMPROMISED
+ACCESSING FILES...
+ENCRYPTING C:
+SENDING DATA TO DARK WEB...
+]]
+hackText.TextColor3 = Color3.new(0,1,0)
+hackText.TextScaled = true
+hackText.Font = Enum.Font.Code
+
+-- Matrix rain effect
+task.spawn(function()
+    while task.wait(0.07) do
+        local char = Instance.new("TextLabel")
+        char.Text = string.char(math.random(33,126))
+        char.TextColor3 = Color3.new(0,1,0)
+        char.Position = UDim2.new(math.random(),0,0,0)
+        char.Font = Enum.Font.Code
+        char.TextSize = 20
+        char.BackgroundTransparency = 1
+        char.Parent = desktop
+        Debris:AddItem(char, 3)
+        tween:Create(char, TweenInfo.new(3, Enum.EasingStyle.Linear), {Position = UDim2.new(math.random(),0,1.2,0), TextTransparency = 1}):Play()
+    end
+end)
+
+task.wait(8)
+
+----------------------------------------------------------------
+-- 3. MAIN VIRUS TROLL WINDOW + 1000% MORE CHAOS
+----------------------------------------------------------------
+local main = Instance.new("Frame")
+main.Size = UDim2.new(0,900,0,650)
+main.Position = UDim2.new(0.5,-450,0.5,-325)
+main.BackgroundColor3 = Color3.new(0,0,0)
+main.BorderSizePixel = 20
+main.Parent = gui
+
+local title = Instance.new("TextLabel", main)
+title.Size = UDim2.new(1,0,0.2,0)
+title.Text = "☢️ SKID.VIRUS.2025 ACTIVATED ☢️"
+title.TextColor3 = Color3.new(1,0,0)
+title.TextScaled = true
+title.Font = Enum.Font.Arcade
+title.TextStrokeTransparency = 0
+
+local body = Instance.new("TextLabel", main)
+body.Size = UDim2.new(1,-60,0.7,0)
+body.Position = UDim2.new(0,30,0.25,0)
+body.BackgroundTransparency = 1
+body.TextColor3 = Color3.new(1,1,1)
+body.TextScaled = true
+body.Text = [[
+VIRUS NAME: GetCaughtSkid.exe
+INFECTED FILES: 69,420
+RANSOM: 10,000 Robux (due in 60 seconds)
+
+Your webcam is now recording
+Your passwords have been leaked
+Your Roblox account will be deleted forever
+
+You should use my other scripts this one does nothing at all :)
+
+PRESS X TO PAY RANSOM (it spawns 70 viruses instead)
+]]
+
+-- X BUTTON FROM HELL
+local x = Instance.new("TextButton", main)
+x.Size = UDim2.new(0,160,0,160)
+x.Position = UDim2.new(1,-190,0,20)
+x.BackgroundColor3 = Color3.new(1,0,0)
+x.Text = "X"
+x.TextScaled = true
+x.Font = Enum.Font.Arcade
+x.MouseButton1Click:Connect(function()
+    s.bruh:Play()
+    s.fard:Play()
+    for i = 1,70 do
+        local c = main:Clone()
+        c.Position = UDim2.new(math.random(0,100)/100,0,math.random(0,100)/100,0)
+        c.Size = UDim2.new(0,math.random(500,1100),0,math.random(400,900))
+        c.Rotation = math.random(-45,45)
+        c.Parent = gui
+        task.spawn(function()
+            while c.Parent and task.wait(0.02) do
+                c.Rotation = c.Rotation + 40
+                c.BackgroundColor3 = Color3.fromHSV(tick()*8%1,1,1)
+            end
+        end)
+    end
+end)
+
+-- Insane rainbow + random sounds
+task.spawn(function()
+    while task.wait(0.04) do
+        main.BorderColor3 = Color3.fromHSV(tick()%1,1,1)
+        if math.random() < 0.3 then
+            ({s.clown,s.fard,s.bruh})[math.random(1,3)]:Play()
+        end
+    end
+end)
+
+-- Rickroll finale
+task.wait(20)
+s.rick.Volume = 50
+s.rick:Play()
+
+----------------------------------------------------------------
+-- 4. FINAL FAKE BAN + KICK (70 seconds after warning)
+----------------------------------------------------------------
+task.wait(50)
+
+-- Nuclear flash + scream
+for i = 1,120 do
+    local f = Instance.new("Frame")
+    f.Size = UDim2.new(1,0,1,0)
+    f.BackgroundColor3 = i%2==0 and Color3.new(1,0,0) or Color3.new(1,1,1)
+    f.ZIndex = 9999
+    f.Parent = gui
+    Debris:AddItem(f,0.1)
+    task.wait(0.05)
+end
+
+local final = Instance.new("TextLabel")
+final.Size = UDim2.new(1,0,1,0)
+final.BackgroundColor3 = Color3.new(0,0,0)
+final.TextColor3 = Color3.new(1,0,0)
+final.Text = "ROBLOX ACCOUNT TERMINATED\n\nYou got clowned harder than ever in 2025\n\n🤡 L + BOZO + RATIO + TOUCH GRASS 🤡"
+final.TextScaled = true
+final.Font = Enum.Font.Arcade
+final.Parent = gui
+
+s.scream.Volume = 100
+s.scream:Play()
+
+task.wait(5)
+
+player:Kick([[
+☢️☢️☢️ PERMANENT BAN ISSUED ☢️☢️☢️
+
+Username: ]]..player.Name..[[
+Reason: Executing malicious skidded scripts
+Duration: Forever
+Robux balance: 0 (sent to troll)
+
+You trusted a random .lua from a Discord kitten in 2025.
+Never gonna give you up,
+Never gonna let you down~
+
+- Love, the guy who just mentally destroyed you in 2025 🤡❤️
+]])
