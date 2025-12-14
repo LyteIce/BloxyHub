@@ -1,1 +1,327 @@
+local Violet = (function()
+    -- Services
+    local TweenService = game:GetService("TweenService")
+    local UserInputService = game:GetService("UserInputService")
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
+    -- Main GUI Setup (based on your provided instances)
+    local VioletUILibrary = Instance.new("ScreenGui")
+    VioletUILibrary.Name = "VioletUILibrary"
+    VioletUILibrary.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    VioletUILibrary.ResetOnSpawn = false
+    VioletUILibrary.Parent = PlayerGui
+
+    local Main = Instance.new("Frame")
+    Main.Name = "Main"
+    Main.Position = UDim2.new(0.302, 0, 0.255, 0)
+    Main.Size = UDim2.new(0, 640, 0, 356)
+    Main.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    Main.BackgroundTransparency = 0.01
+    Main.BorderSizePixel = 0
+    Main.ClipsDescendants = true
+    Main.Parent = VioletUILibrary
+
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 12)
+    UICorner.Parent = Main
+
+    local UIGradient = Instance.new("UIGradient")
+    UIGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(30, 30, 30)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(108, 108, 108))
+    }
+    UIGradient.Parent = Main
+
+    -- Topbar
+    local Topbar = Instance.new("Frame")
+    Topbar.Name = "Topbar"
+    Topbar.Position = UDim2.new(0.020, 0, 0.034, 0)
+    Topbar.Size = UDim2.new(0, 609, 0, 33)
+    Topbar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    Topbar.BorderSizePixel = 0
+    Topbar.Parent = Main
+
+    local TopbarCorner = Instance.new("UICorner")
+    TopbarCorner.CornerRadius = UDim.new(0, 50)
+    TopbarCorner.Parent = Topbar
+
+    local Title = Instance.new("TextLabel")
+    Title.Name = "Title"
+    Title.Position = UDim2.new(0.011, 0, 0.121, 0)
+    Title.Size = UDim2.new(0, 381, 0, 24)
+    Title.BackgroundTransparency = 1
+    Title.Text = "Violet Ui Library"
+    Title.TextColor3 = Color3.new(1, 1, 1)
+    Title.TextSize = 14
+    Title.Font = Font.new("SourceSansPro", Enum.FontWeight.Bold)
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.Parent = Topbar
+
+    -- Close Button
+    local Close = Instance.new("TextButton")
+    Close.Name = "Close"
+    Close.Position = UDim2.new(0.933, 0, 0.121, 0)
+    Close.Size = UDim2.new(0, 32, 0, 24)
+    Close.BackgroundColor3 = Color3.fromRGB(91, 39, 39)
+    Close.Text = ""
+    Close.Parent = Topbar
+
+    local CloseCorner = Instance.new("UICorner")
+    CloseCorner.Parent = Close
+
+    -- Dragging functionality
+    local dragging = false
+    local dragInput, dragStart, startPos
+
+    Topbar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = Main.Position
+
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    Topbar.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement and dragging then
+            local delta = input.Position - dragStart
+            Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+
+    -- Tab Buttons Sidebar
+    local TabButtons = Instance.new("Frame")
+    TabButtons.Name = "TabButtons"
+    TabButtons.Position = UDim2.new(0.020, 0, 0.169, 0)
+    TabButtons.Size = UDim2.new(0, 124, 0, 281)
+    TabButtons.BackgroundColor3 = Color3.fromRGB(61, 61, 61)
+    TabButtons.BorderSizePixel = 0
+    TabButtons.Parent = Main
+
+    local TabButtonsCorner = Instance.new("UICorner")
+    TabButtonsCorner.Parent = TabButtons
+
+    local TabButtonsGradient = Instance.new("UIGradient")
+    TabButtonsGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(66, 66, 66)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(116, 116, 116))
+    }
+    TabButtonsGradient.Parent = TabButtons
+
+    local TabScrolling = Instance.new("ScrollingFrame")
+    TabScrolling.Size = UDim2.new(1, 0, 1, 0)
+    TabScrolling.BackgroundTransparency = 1
+    TabScrolling.ScrollBarThickness = 5
+    TabScrolling.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    TabScrolling.Parent = TabButtons
+
+    local TabListLayout = Instance.new("UIListLayout")
+    TabListLayout.Padding = UDim.new(0, 10)
+    TabListLayout.PaddingTop = UDim.new(0, 5)
+    TabListLayout.Parent = TabScrolling
+
+    -- Tab Holders
+    local TabHolders = Instance.new("Folder")
+    TabHolders.Name = "TabHolders"
+    TabHolders.Parent = Main
+
+    -- Shadow (you had this, keeping it simple)
+    local shadowHolder = Instance.new("Frame")
+    shadowHolder.Size = UDim2.new(1, 0, 1, 0)
+    shadowHolder.BackgroundTransparency = 1
+    shadowHolder.ZIndex = 0
+    shadowHolder.Parent = Main
+
+    -- Add your shadow images here if needed
+
+    -- Library table
+    local Library = {}
+
+    -- Create Window (main function)
+    function Library:window(options)
+        options = options or {}
+        local windowTitle = options.Title or "VioletX"
+        Title.Text = windowTitle
+
+        local tabs = options.Tabs or {}
+
+        local selectedTab = nil
+        local tabObjects = {}
+
+        -- Close button functionality
+        Close.MouseButton1Click:Connect(function()
+            VioletUILibrary:Destroy()
+        end)
+
+        -- Create tabs
+        for _, tabName in ipairs(tabs) do
+            local TabBtn = Instance.new("TextButton")
+            TabBtn.Size = UDim2.new(0, 107, 0, 28)
+            TabBtn.BackgroundColor3 = Color3.fromRGB(42, 42, 42)
+            TabBtn.Text = tabName
+            TabBtn.TextColor3 = Color3.new(1,1,1)
+            TabBtn.TextSize = 14
+            TabBtn.Font = Font.new("SourceSansPro", Enum.FontWeight.Bold)
+            TabBtn.Parent = TabScrolling
+
+            local TabBtnCorner = Instance.new("UICorner")
+            TabBtnCorner.Parent = TabBtn
+
+            local Container = Instance.new("ScrollingFrame")
+            Container.Name = tabName .. "Container"
+            Container.Position = UDim2.new(0.228, 0, 0.169, 0)
+            Container.Size = UDim2.new(0, 476, 0, 281)
+            Container.BackgroundTransparency = 1
+            Container.ScrollBarThickness = 5
+            Container.AutomaticCanvasSize = Enum.AutomaticSize.Y
+            Container.Visible = false
+            Container.Parent = Main
+
+            local ContentLayout = Instance.new("UIListLayout")
+            ContentLayout.Padding = UDim.new(0, 10)
+            ContentLayout.Parent = Container
+
+            local ContentPadding = Instance.new("UIPadding")
+            ContentPadding.PaddingLeft = UDim.new(0, 10)
+            ContentPadding.PaddingTop = UDim.new(0, 10)
+            ContentPadding.Parent = Container
+
+            tabObjects[tabName] = {
+                Button = TabBtn,
+                Container = Container,
+                Elements = {}
+            }
+
+            TabBtn.MouseButton1Click:Connect(function()
+                if selectedTab then
+                    selectedTab.Container.Visible = false
+                    TweenService:Create(selectedTab.Button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(42,42,42)}):Play()
+                end
+                Container.Visible = true
+                TweenService:Create(TabBtn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(80,80,140)}):Play()  -- Violet highlight
+                selectedTab = tabObjects[tabName]
+            end)
+
+            -- Auto select first tab
+            if not selectedTab then
+                TabBtn:Activate()  -- Simulate click
+                TabBtn.MouseButton1Click:Fire()
+            end
+        end
+
+        -- Tab object (returned for adding elements)
+        local TabApi = {}
+
+        function TabApi:button(opts)
+            local tabName = debug.getinfo(2).name or "Unknown"  -- Rough way, better to pass tab
+            -- Wait, your example uses home:button, so it's window level, adds to selected or first?
+            -- For simplicity, add to the currently selected tab
+
+            if not selectedTab then return end
+
+            local btnOpts = opts or {}
+            local name = btnOpts.Name or "Button"
+            local callback = btnOpts.Callback or function() end
+
+            local Button = Instance.new("TextButton")
+            Button.Size = UDim2.new(1, -20, 0, 35)
+            Button.BackgroundColor3 = Color3.fromRGB(50,50,50)
+            Button.Text = name
+            Button.TextColor3 = Color3.new(1,1,1)
+            Button.Parent = selectedTab.Container
+
+            local BtnCorner = Instance.new("UICorner")
+            BtnCorner.CornerRadius = UDim.new(0, 6)
+            BtnCorner.Parent = Button
+
+            Button.MouseButton1Click:Connect(callback)
+
+            TweenService:Create(Button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(70,70,70)}):Play()  -- Hover effect optional
+            Button.MouseEnter:Connect(function()
+                TweenService:Create(Button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(90,50,150)}):Play()
+            end)
+            Button.MouseLeave:Connect(function()
+                TweenService:Create(Button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50,50,50)}):Play()
+            end)
+        end
+
+        function TabApi:toggle(opts)
+            if not selectedTab then return end
+
+            local togOpts = opts or {}
+            local name = togOpts.Name or "Toggle"
+            local default = togOpts.Active or false
+            local callback = togOpts.Callback or function() end
+
+            local ToggleFrame = Instance.new("Frame")
+            ToggleFrame.Size = UDim2.new(1, -20, 0, 35)
+            ToggleFrame.BackgroundColor3 = Color3.fromRGB(50,50,50)
+            ToggleFrame.Parent = selectedTab.Container
+
+            local TogCorner = Instance.new("UICorner")
+            TogCorner.CornerRadius = UDim.new(0, 6)
+            TogCorner.Parent = ToggleFrame
+
+            local TogLabel = Instance.new("TextLabel")
+            TogLabel.Text = name
+            TogLabel.BackgroundTransparency = 1
+            TogLabel.TextColor3 = Color3.new(1,1,1)
+            TogLabel.Position = UDim2.new(0, 10, 0, 0)
+            TogLabel.Size = UDim2.new(1, -60, 1, 0)
+            TogLabel.TextXAlignment = Enum.TextXAlignment.Left
+            TogLabel.Parent = ToggleFrame
+
+            local Indicator = Instance.new("Frame")
+            Indicator.Size = UDim2.new(0, 40, 0, 20)
+            Indicator.Position = UDim2.new(1, -50, 0.5, -10)
+            Indicator.BackgroundColor3 = default and Color3.fromRGB(150,50,200) or Color3.fromRGB(80,80,80)
+            Indicator.Parent = ToggleFrame
+
+            local IndCorner = Instance.new("UICorner")
+            IndCorner.CornerRadius = UDim.new(1, 0)
+            IndCorner.Parent = Indicator
+
+            local Circle = Instance.new("Frame")
+            Circle.Size = UDim2.new(0, 16, 0, 16)
+            Circle.Position = default and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)
+            Circle.BackgroundColor3 = Color3.new(1,1,1)
+            Circle.Parent = Indicator
+
+            local CircleCorner = Instance.new("UICorner")
+            CircleCorner.CornerRadius = UDim.new(1, 0)
+            CircleCorner.Parent = Circle
+
+            local active = default
+
+            ToggleFrame.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    active = not active
+                    callback(active)
+
+                    TweenService:Create(Indicator, TweenInfo.new(0.2), {BackgroundColor3 = active and Color3.fromRGB(150,50,200) or Color3.fromRGB(80,80,80)}):Play()
+                    TweenService:Create(Circle, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {Position = active and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)}):Play()
+                end
+            end)
+        end
+
+        -- Add more components like slider, dropdown, etc. here if you want
+
+        return TabApi
+    end
+
+    return Library
+end)()
+
+-- Example usage (as in your request):
+-- local home = Violet:window({Title = "VioletX", Tabs = {"Home", "Aimbot", "Player", "Settings"}})
+-- home:button({Name = "Hello", Callback = function() print("Hello World!") end})
+-- home:toggle({Name = "Toggle", Active = false, Callback = function(active) print("Toggled: " .. tostring(active)) end})
+
+return Violet
