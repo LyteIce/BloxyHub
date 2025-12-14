@@ -96,38 +96,53 @@ function VioletKey:CreateKeyWindow(options)
     Desc.TextYAlignment = Enum.TextYAlignment.Top
     Desc.Parent = Main
 
+    -- Updated GetKey section with glowing neon blue text and shadow effect
     local GetKey = Instance.new("TextButton")
     GetKey.Name = "GetKey"
-    GetKey.Position = UDim2.new(0.693, 0, 0.597, 0)
-    GetKey.Size = UDim2.new(0, 200, 0, 35)
+    GetKey.Position = UDim2.new(0.55, 0, 0.70, 0)  -- Adjusted position to better fit the look
+    GetKey.Size = UDim2.new(0, 300, 0, 50)
     GetKey.BackgroundTransparency = 1
     GetKey.Text = GetKeyText
-    GetKey.TextColor3 = Color3.fromRGB(100, 150, 255)
-    GetKey.TextSize = 16
+    GetKey.TextColor3 = Color3.fromRGB(0, 162, 255)  -- Bright cyan/blue
+    GetKey.TextSize = 28
     GetKey.Font = Enum.Font.SourceSansBold
     GetKey.TextWrapped = true
     GetKey.TextXAlignment = Enum.TextXAlignment.Left
     GetKey.Parent = Main
 
-    -- Make GetKey look like a link (underline + hover effect)
-    local GetKeyStroke = Instance.new("UIStroke")
-    GetKeyStroke.Thickness = 1
-    GetKeyStroke.Color = Color3.fromRGB(100, 150, 255)
-    GetKeyStroke.Parent = GetKey
+    -- Glow effect using multiple UIStrokes with blur (simulate glow)
+    for i = 1, 5 do
+        local stroke = Instance.new("UIStroke")
+        stroke.Thickness = 2 + i * 2
+        stroke.Color = Color3.fromRGB(0, 162, 255)
+        stroke.Transparency = 0.5 + (i * 0.1)
+        stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+        stroke.Parent = GetKey
+    end
 
+    -- Additional shadow/glow with a duplicate label slightly offset
+    local GlowShadow = GetKey:Clone()
+    GlowShadow.Name = "GlowShadow"
+    GlowShadow.TextColor3 = Color3.fromRGB(0, 100, 200)
+    GlowShadow.Position = UDim2.new(0, 2, 0, 2)
+    GlowShadow.TextTransparency = 0.5
+    GlowShadow.ZIndex = GetKey.ZIndex - 1
+    GlowShadow.Parent = Main
+
+    -- Hover effect
     GetKey.MouseEnter:Connect(function()
-        GetKey.TextColor3 = Color3.fromRGB(150, 200, 255)
+        GetKey.TextColor3 = Color3.fromRGB(100, 200, 255)
     end)
     GetKey.MouseLeave:Connect(function()
-        GetKey.TextColor3 = Color3.fromRGB(100, 150, 255)
+        GetKey.TextColor3 = Color3.fromRGB(0, 162, 255)
     end)
 
     GetKey.MouseButton1Click:Connect(function()
         setclipboard(GetKeyLink)
-        -- Optional: show a quick notification that link was copied
+        -- Optional notification could be added here
     end)
 
-    -- Draggable functionality
+    -- Draggable functionality (same as before)
     local dragging = false
     local dragInput
     local dragStart
@@ -168,17 +183,16 @@ function VioletKey:CreateKeyWindow(options)
             OnSuccess()
         else
             KeyBox.Text = ""
-            -- Simple wrong key feedback
             KeyBox.PlaceholderText = "Wrong Key!"
             task.wait(2)
             KeyBox.PlaceholderText = "Enter Key"
         end
     end)
 
-    -- Allow pressing Enter key in the TextBox
+    -- Allow pressing Enter in TextBox
     KeyBox.FocusLost:Connect(function(enterPressed)
         if enterPressed then
-            Enter:Activate()
+            Enter.MouseButton1Click:Fire()
         end
     end)
 end
