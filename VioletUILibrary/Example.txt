@@ -1,0 +1,21 @@
+local syn = loadstring(game:HttpGet("https://raw.githubusercontent.com/LyteIce/BloxyHub/refs/heads/main/VioletUILibrary/VioletSyn.txt"))()
+
+local window = syn:createWindow({
+    Title = "My Awesome Hub"
+})
+
+window:createToggle("Aimbot", function(state)
+    print("Aimbot: " .. tostring(state))
+end)
+
+window:createSlider("WalkSpeed", 16, 300, 100, function(value)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+end)
+
+window:createButton("Fly", function()
+    print("Flying!")
+end)
+
+window:createButton("Infinite Yield", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+end)
