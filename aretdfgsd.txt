@@ -1,0 +1,388 @@
+print([[
+____ ____.__ .__ __ ______________.___._______
+\ \ / /|__| ____ | | _____/ |_ / _____/\__ | |\ \
+ \ Y / | |/ _ \| | _/ __ \ __\ \_____ \ / | |/ | \
+  \ / | ( <_> ) |_\ ___/| | / \ \____ / | \
+   \___/ |__|\____/|____/\___ >__| /_______ / / ______\____|__ /
+                               \/ \/ \/ \/
+]])
+print("Violet Syn has been loaded!")
+print("Made by Waffley.")
+print("UI Library by Waffley!")
+print("Join discord: https://discord.gg/Ty5r4A398J")
+
+local VioletSyn = {}
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
+local gui = player:WaitForChild("PlayerGui")
+
+-- Notification
+local function createNotification(text, duration)
+    local notifyGui = Instance.new("ScreenGui")
+    notifyGui.Name = "VioletNotify"
+    notifyGui.Parent = gui
+    notifyGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 340, 0, 60)
+    frame.Position = UDim2.new(1, 10, 1, -10)
+    frame.AnchorPoint = Vector2.new(1, 1)
+    frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    frame.BackgroundTransparency = 0.2
+    frame.BorderSizePixel = 0
+    frame.Parent = notifyGui
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 12)
+    corner.Parent = frame
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(140, 100, 255)
+    stroke.Thickness = 2
+    stroke.Parent = frame
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, -20, 1, 0)
+    label.Position = UDim2.new(0, 10, 0, 0)
+    label.BackgroundTransparency = 1
+    label.Text = text
+    label.TextColor3 = Color3.new(1, 1, 1)
+    label.TextSize = 18
+    label.Font = Enum.Font.SourceSansBold
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.TextWrapped = true
+    label.Parent = frame
+    frame.Position = UDim2.new(1, 350, 1, -10)
+    TweenService:Create(frame, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Position = UDim2.new(1, 10, 1, -10)}):Play()
+    task.delay(duration or 6, function()
+        TweenService:Create(frame, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Position = UDim2.new(1, 350, 1, -10)}):Play()
+        task.delay(0.5, function()
+            notifyGui:Destroy()
+        end)
+    end)
+end
+
+function VioletSyn:createWindow(options)
+    options = options or {}
+    local title = options.Title or "Violet Syn"
+    local keySystem = options.KeySystem or false
+    local key = options.Key or ""
+
+    if keySystem then
+        local Syn_Key = Instance.new("ScreenGui")
+        Syn_Key.Name = "Syn Key"
+        Syn_Key.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        Syn_Key.Enabled = true
+        Syn_Key.Parent = gui
+
+        local Main = Instance.new("Frame")
+        Main.Name = "Main"
+        Main.Position = UDim2.new(0.308025, 0, 0.372437, 0)
+        Main.Size = UDim2.new(0, 222, 0, 168)
+        Main.BackgroundColor3 = Color3.new(1, 1, 1)
+        Main.BorderSizePixel = 0
+        Main.Parent = Syn_Key
+
+        local UICorner = Instance.new("UICorner")
+        UICorner.Parent = Main
+
+        local UIGradient = Instance.new("UIGradient")
+        UIGradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0.0156863)), ColorSequenceKeypoint.new(0.3391, Color3.new(0.254902, 0, 0.00392157)), ColorSequenceKeypoint.new(1, Color3.new(0, 0, 0))})
+        UIGradient.Parent = Main
+
+        local Code = Instance.new("Frame")
+        Code.Name = "Code"
+        Code.Position = UDim2.new(0.121622, 0, 0.309524, 0)
+        Code.Size = UDim2.new(0, 168, 0, 46)
+        Code.BackgroundColor3 = Color3.new(1, 1, 1)
+        Code.BackgroundTransparency = 1
+        Code.Parent = Main
+
+        local Key_enter = Instance.new("TextBox")
+        Key_enter.Name = "Key enter"
+        Key_enter.Position = UDim2.new(0, 0, 0.26087, 0)
+        Key_enter.Size = UDim2.new(0, 168, 0, 22)
+        Key_enter.BackgroundColor3 = Color3.new(0.172549, 0.172549, 0.172549)
+        Key_enter.Text = ""
+        Key_enter.TextColor3 = Color3.new(1, 1, 1)
+        Key_enter.TextSize = 14
+        Key_enter.PlaceholderText = "Enter Key"
+        Key_enter.Parent = Code
+
+        local UICorner2 = Instance.new("UICorner")
+        UICorner2.Parent = Key_enter
+
+        local Enter = Instance.new("TextButton")
+        Enter.Name = "Enter"
+        Enter.Position = UDim2.new(0.238095, 0, 1.08696, 0)
+        Enter.Size = UDim2.new(0, 87, 0, 19)
+        Enter.BackgroundColor3 = Color3.new(0.313726, 0.313726, 0.313726)
+        Enter.Text = "Enter"
+        Enter.TextColor3 = Color3.new(1, 1, 1)
+        Enter.TextSize = 14
+        Enter.Parent = Code
+
+        local UICorner3 = Instance.new("UICorner")
+        UICorner3.Parent = Enter
+
+        local Title = Instance.new("TextLabel")
+        Title.Name = "Title"
+        Title.Position = UDim2.new(-0.160714, 0, -1.67391, 0)
+        Title.Size = UDim2.new(0, 222, 0, 25)
+        Title.BackgroundTransparency = 1
+        Title.Text = "Syn Key"
+        Title.TextColor3 = Color3.new(1, 1, 1)
+        Title.TextSize = 14
+        Title.Parent = Main
+
+        Enter.MouseButton1Click:Connect(function()
+            if Key_enter.Text == key then
+                Syn_Key:Destroy()
+                task.wait(0.5)
+                createMainUI()
+            else
+                createNotification("Invalid Key!", 3)
+            end
+        end)
+        return VioletSyn
+    else
+        return createMainUI()
+    end
+
+    function createMainUI()
+        task.wait(3)
+        createNotification("Violet Syn Loaded • Join discord.gg/Ty5r4A398J", 7)
+        local screenGui = Instance.new("ScreenGui")
+        screenGui.Name = "VioletSynGui"
+        screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        screenGui.Parent = gui
+
+        local mainFrame = Instance.new("Frame")
+        mainFrame.Size = UDim2.new(0, 220, 0, 40)
+        mainFrame.Position = UDim2.new(0.01, 0, 0.05, 0)
+        mainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+        mainFrame.BackgroundTransparency = 0.1
+        mainFrame.ClipsDescendants = true
+        mainFrame.Parent = screenGui
+
+        local mainCorner = Instance.new("UICorner")
+        mainCorner.CornerRadius = UDim.new(0, 16)
+        mainCorner.Parent = mainFrame
+
+        local mainStroke = Instance.new("UIStroke")
+        mainStroke.Color = Color3.fromRGB(140, 100, 255)
+        mainStroke.Thickness = 1.5
+        mainStroke.Transparency = 0.4
+        mainStroke.Parent = mainFrame
+
+        -- Title Bar
+        local titleBar = Instance.new("Frame")
+        titleBar.Size = UDim2.new(1, 0, 0, 40)
+        titleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+        titleBar.BackgroundTransparency = 0.2
+        titleBar.Parent = mainFrame
+
+        local titleCorner = Instance.new("UICorner")
+        titleCorner.CornerRadius = UDim.new(0, 16)
+        titleCorner.Parent = titleBar
+
+        local titleLabel = Instance.new("TextLabel")
+        titleLabel.Size = UDim2.new(1, -100, 1, 0)
+        titleLabel.Position = UDim2.new(0, 15, 0, 0)
+        titleLabel.BackgroundTransparency = 1
+        titleLabel.Text = title
+        titleLabel.TextColor3 = Color3.new(1, 1, 1)
+        titleLabel.TextSize = 17
+        titleLabel.Font = Enum.Font.SourceSansBold
+        titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+        titleLabel.Parent = titleBar
+
+        -- Discord Button
+        local discordBtn = Instance.new("ImageButton")
+        discordBtn.Size = UDim2.new(0, 30, 0, 30)
+        discordBtn.Position = UDim2.new(1, -80, 0.5, -15)
+        discordBtn.BackgroundTransparency = 1
+        discordBtn.Image = "rbxassetid://9471409169"
+        discordBtn.ImageColor3 = Color3.fromRGB(140, 100, 255)
+        discordBtn.Parent = titleBar
+
+        discordBtn.MouseButton1Click:Connect(function()
+            setclipboard("https://discord.gg/Ty5r4A398J")
+            createNotification("Discord link copied!", 3)
+        end)
+
+        discordBtn.MouseEnter:Connect(function()
+            discordBtn.ImageColor3 = Color3.new(1, 1, 1)
+        end)
+        discordBtn.MouseLeave:Connect(function()
+            discordBtn.ImageColor3 = Color3.fromRGB(140, 100, 255)
+        end)
+
+        local arrowBtn = Instance.new("TextButton")
+        arrowBtn.Size = UDim2.new(0, 40, 0, 40)
+        arrowBtn.Position = UDim2.new(1, -40, 0, 0)
+        arrowBtn.BackgroundTransparency = 1
+        arrowBtn.Text = "⤵"
+        arrowBtn.TextColor3 = Color3.fromRGB(140, 100, 255)
+        arrowBtn.TextSize = 24
+        arrowBtn.Parent = titleBar
+
+        -- Tab Scroll
+        local tabScroll = Instance.new("ScrollingFrame")
+        tabScroll.Size = UDim2.new(1, -20, 1, -50)
+        tabScroll.Position = UDim2.new(0, 10, 0, 45)
+        tabScroll.BackgroundTransparency = 1
+        tabScroll.ScrollBarThickness = 4
+        tabScroll.ScrollBarImageColor3 = Color3.fromRGB(140, 100, 255)
+        tabScroll.Parent = mainFrame
+
+        local tabLayout = Instance.new("UIListLayout")
+        tabLayout.Padding = UDim.new(0, 5)
+        tabLayout.Parent = tabScroll
+
+        -- Content Frame
+        local contentFrame = Instance.new("Frame")
+        contentFrame.Size = UDim2.new(1, -20, 1, -50)
+        contentFrame.Position = UDim2.new(0, 10, 0, 45)
+        contentFrame.BackgroundTransparency = 1
+        contentFrame.Parent = mainFrame
+
+        local contentLayout = Instance.new("UIListLayout")
+        contentLayout.Padding = UDim.new(0, 15)
+        contentLayout.Parent = contentFrame
+
+        -- Draggable
+        local dragging = false
+        local dragStart, startPos
+        titleBar.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                dragging = true
+                dragStart = input.Position
+                startPos = mainFrame.Position
+            end
+        end)
+        titleBar.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement and dragging then
+                local delta = input.Position - dragStart
+                mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+            end
+        end)
+        UserInputService.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                dragging = false
+            end
+        end)
+
+        -- Open/Close
+        local isOpen = false
+        arrowBtn.MouseButton1Click:Connect(function()
+            isOpen = not isOpen
+            local targetSize = isOpen and UDim2.new(0, 220, 0, 420) or UDim2.new(0, 220, 0, 40)
+            TweenService:Create(mainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Size = targetSize}):Play()
+            TweenService:Create(arrowBtn, TweenInfo.new(0.3), {Rotation = isOpen and 180 or 0}):Play()
+            arrowBtn.Text = isOpen and "⤴" or "⤵"
+        end)
+
+        local window = {}
+        window.Tabs = {}
+
+        function window:AddTab(tabOptions)
+            tabOptions = tabOptions or {}
+            local tabName = tabOptions.Name or "Tab"
+
+            local tabBtn = Instance.new("TextButton")
+            tabBtn.Size = UDim2.new(1, -20, 0, 30)
+            tabBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+            tabBtn.Text = tabName
+            tabBtn.TextColor3 = Color3.new(1,1,1)
+            tabBtn.Parent = tabScroll
+
+            local tabCorner = Instance.new("UICorner")
+            tabCorner.CornerRadius = UDim.new(0,8)
+            tabCorner.Parent = tabBtn
+
+            local tabContent = Instance.new("Frame")
+            tabContent.Size = UDim2.new(1,0,1,0)
+            tabContent.BackgroundTransparency = 1
+            tabContent.Visible = false
+            tabContent.Parent = contentFrame
+
+            local tabList = Instance.new("UIListLayout")
+            tabList.Padding = UDim.new(0,15)
+            tabList.Parent = tabContent
+
+            tabBtn.MouseButton1Click:Connect(function()
+                for _, t in pairs(window.Tabs) do
+                    t.Content.Visible = false
+                end
+                tabContent.Visible = true
+            end)
+
+            if #window.Tabs == 0 then
+                tabContent.Visible = true
+            end
+
+            table.insert(window.Tabs, {Button = tabBtn, Content = tabContent})
+
+            local tab = {}
+
+            function tab:createToggle(name, callback)
+                local frame = Instance.new("Frame")
+                frame.Size = UDim2.new(1, -20, 0, 35)
+                frame.BackgroundTransparency = 1
+                frame.Parent = tabContent
+
+                local label = Instance.new("TextLabel")
+                label.Size = UDim2.new(0.65, 0, 1, 0)
+                label.BackgroundTransparency = 1
+                label.Text = name
+                label.TextColor3 = Color3.new(1, 1, 1)
+                label.TextSize = 16
+                label.Font = Enum.Font.SourceSansSemibold
+                label.TextXAlignment = Enum.TextXAlignment.Left
+                label.Parent = frame
+
+                local toggle = Instance.new("TextButton")
+                toggle.Size = UDim2.new(0, 50, 0, 25)
+                toggle.Position = UDim2.new(1, -50, 0.5, -12.5)
+                toggle.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+                toggle.Text = ""
+                toggle.Parent = frame
+
+                local toggleCorner = Instance.new("UICorner")
+                toggleCorner.CornerRadius = UDim.new(1, 0)
+                toggleCorner.Parent = toggle
+
+                local circle = Instance.new("Frame")
+                circle.Size = UDim2.new(0, 22, 0, 22)
+                circle.Position = UDim2.new(0, 3, 0.5, -11)
+                circle.BackgroundColor3 = Color3.new(1, 1, 1)
+                circle.Parent = toggle
+
+                local circleCorner = Instance.new("UICorner")
+                circleCorner.CornerRadius = UDim.new(1, 0)
+                circleCorner.Parent = circle
+
+                local state = false
+                toggle.MouseButton1Click:Connect(function()
+                    state = not state
+                    TweenService:Create(circle, TweenInfo.new(0.2), {Position = state and UDim2.new(1, -25, 0.5, -11) or UDim2.new(0, 3, 0.5, -11)}):Play()
+                    TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = state and Color3.fromRGB(140, 100, 255) or Color3.fromRGB(50, 50, 50)}):Play()
+                    if callback then callback(state) end
+                end)
+            end
+
+            -- Add other elements like createSlider, createButton similarly inside tab
+
+            return tab
+        end
+
+        -- Auto canvas size for content
+        contentLayout.Changed:Connect(function()
+            contentFrame.CanvasSize = UDim2.new(0, 0, 0, contentLayout.AbsoluteContentSize.Y + 40)
+        end)
+
+        return window
+    end
+end
+
+return VioletSyn
