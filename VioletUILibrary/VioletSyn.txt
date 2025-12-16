@@ -1,4 +1,7 @@
-print([[ 
+-- ==================== CUSTOMIZABLE TOP SECTION ====================
+-- You can change or remove ANY of these prints except the credit line below
+
+print([[
 ____   ____.__       .__          __      ______________.___._______   
 \   \ /   /|__| ____ |  |   _____/  |_   /   _____/\__  |   |\      \  
  \   Y   / |  |/  _ \|  | _/ __ \   __\  \_____  \  /   |   |/   |   \ 
@@ -9,8 +12,12 @@ ____   ____.__       .__          __      ______________.___._______
 
 print("Violet Syn has been loaded!")
 print("Made by Waffley.")
-print("UI Library by Waffley!")
 print("Join discord: https://discord.gg/Ty5r4A398J")
+
+-- THIS LINE CANNOT BE CHANGED OR REMOVED - CREDIT STAYS FOREVER
+print("UI Library by Waffley!")
+
+-- ==================================================================
 
 local VioletSyn = {}
 VioletSyn.Windows = {}
@@ -24,7 +31,7 @@ local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local gui = player:WaitForChild("PlayerGui")
 
--- Notification
+-- Notification Function
 local function createNotification(text, duration)
     local notifyGui = Instance.new("ScreenGui")
     notifyGui.Name = "VioletNotify"
@@ -72,7 +79,7 @@ local function createNotification(text, duration)
     end)
 end
 
--- Create Window Function
+-- Create Window
 function VioletSyn:createWindow(options)
     options = options or {}
     local title = options.Title or "Violet Syn"
@@ -127,12 +134,12 @@ function VioletSyn:createWindow(options)
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.Parent = titleBar
 
-    -- Discord Button (ImageButton with Discord logo)
+    -- Discord Button
     local discordBtn = Instance.new("ImageButton")
     discordBtn.Size = UDim2.new(0, 30, 0, 30)
     discordBtn.Position = UDim2.new(1, -80, 0.5, -15)
     discordBtn.BackgroundTransparency = 1
-    discordBtn.Image = "rbxassetid://9471409169"  -- Clean white Discord logo
+    discordBtn.Image = "rbxassetid://9471409169"
     discordBtn.ImageColor3 = Color3.fromRGB(140, 100, 255)
     discordBtn.ScaleType = Enum.ScaleType.Fit
     discordBtn.Parent = titleBar
@@ -179,29 +186,32 @@ function VioletSyn:createWindow(options)
     padding.PaddingBottom = UDim.new(0, 20)
     padding.Parent = scrollingFrame
 
-    -- Draggable
+    -- Draggable (Mobile + PC)
     local dragging = false
     local dragStart, startPos
+
     titleBar.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
             dragStart = input.Position
             startPos = mainFrame.Position
         end
     end)
+
     titleBar.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement and dragging then
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
             local delta = input.Position - dragStart
             mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
         end
     end)
+
     UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = false
         end
     end)
 
-    -- Open/Close
+    -- Open/Close Animation
     local isOpen = false
     arrowBtn.MouseButton1Click:Connect(function()
         isOpen = not isOpen
@@ -217,7 +227,7 @@ function VioletSyn:createWindow(options)
         end
     end)
 
-    -- Element Creators (returned for the window)
+    -- Elements
     local window = {}
 
     function window:createToggle(name, callback)
@@ -293,7 +303,6 @@ function VioletSyn:createWindow(options)
         barCorner.Parent = sliderBar
 
         local fill = Instance.new("Frame")
-        fill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
         fill.BackgroundColor3 = Color3.fromRGB(140, 100, 255)
         fill.Parent = sliderBar
 
@@ -305,29 +314,40 @@ function VioletSyn:createWindow(options)
         valueLabel.Size = UDim2.new(1, 0, 0, 20)
         valueLabel.Position = UDim2.new(0, 0, 0, 40)
         valueLabel.BackgroundTransparency = 1
-        valueLabel.Text = default
         valueLabel.TextColor3 = Color3.fromRGB(200, 200, 255)
         valueLabel.TextSize = 14
         valueLabel.Parent = frame
 
+        local function updateValue(val)
+            val = math.floor(val)
+            local rel = (val - min) / (max - min)
+            fill.Size = UDim2.new(rel, 0, 1, 0)
+            valueLabel.Text = tostring(val)
+            if callback then callback(val) end
+        end
+
+        updateValue(default or min)
+
         local dragging = false
+
         sliderBar.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true end
-        end)
-        sliderBar.InputEnded:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                dragging = true
+            end
         end)
 
-        RunService.RenderStepped:Connect(function()
-            if dragging then
-                local mouseX = UserInputService:GetMouseLocation().X
-                local barX = sliderBar.AbsolutePosition.X
-                local barWidth = sliderBar.AbsoluteSize.X
-                local rel = math.clamp((mouseX - barX) / barWidth, 0, 1)
-                fill.Size = UDim2.new(rel, 0, 1, 0)
-                local value = math.floor(min + (max - min) * rel)
-                valueLabel.Text = value
-                if callback then callback(value) end
+        sliderBar.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                dragging = false
+            end
+        end)
+
+        UserInputService.InputChanged:Connect(function(input)
+            if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+                local relX = (input.Position.X - sliderBar.AbsolutePosition.X) / sliderBar.AbsoluteSize.X
+                local clamped = math.clamp(relX, 0, 1)
+                local value = min + (max - min) * clamped
+                updateValue(value)
             end
         end)
     end
@@ -350,7 +370,7 @@ function VioletSyn:createWindow(options)
         btn.MouseButton1Click:Connect(callback or function() end)
     end
 
-    -- Auto canvas size
+    -- Auto Canvas Size
     listLayout.Changed:Connect(function()
         scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 40)
     end)
