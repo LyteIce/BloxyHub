@@ -1,7 +1,4 @@
--- ==================== CUSTOMIZABLE TOP SECTION ====================
--- You can change or remove ANY of these prints except the credit line below
-
-print([[
+print([[ 
 ____   ____.__       .__          __      ______________.___._______   
 \   \ /   /|__| ____ |  |   _____/  |_   /   _____/\__  |   |\      \  
  \   Y   / |  |/  _ \|  | _/ __ \   __\  \_____  \  /   |   |/   |   \ 
@@ -12,12 +9,8 @@ ____   ____.__       .__          __      ______________.___._______
 
 print("Violet Syn has been loaded!")
 print("Made by Waffley.")
-print("Join discord: https://discord.gg/Ty5r4A398J")
-
--- THIS LINE CANNOT BE CHANGED OR REMOVED - CREDIT STAYS FOREVER
 print("UI Library by Waffley!")
-
--- ==================================================================
+print("Join discord: https://discord.gg/Ty5r4A398J")
 
 local VioletSyn = {}
 VioletSyn.Windows = {}
@@ -27,16 +20,18 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
+local CoreGui = game:GetService("CoreGui")
 
 local player = Players.LocalPlayer
-local gui = player:WaitForChild("PlayerGui")
+local playerGui = player:WaitForChild("PlayerGui")
 
--- Notification Function
+-- Notification (now on CoreGui for top priority)
 local function createNotification(text, duration)
     local notifyGui = Instance.new("ScreenGui")
     notifyGui.Name = "VioletNotify"
-    notifyGui.Parent = gui
+    notifyGui.Parent = CoreGui
     notifyGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    notifyGui.DisplayOrder = 999999
 
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 340, 0, 60)
@@ -79,7 +74,7 @@ local function createNotification(text, duration)
     end)
 end
 
--- Create Window
+-- Create Window Function
 function VioletSyn:createWindow(options)
     options = options or {}
     local title = options.Title or "Violet Syn"
@@ -89,8 +84,10 @@ function VioletSyn:createWindow(options)
 
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "VioletSynGui"
+    screenGui.Parent = CoreGui  -- Always on top of EVERYTHING
     screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    screenGui.Parent = gui
+    screenGui.DisplayOrder = 999999  -- Highest priority
+    screenGui.ResetOnSpawn = false  -- Persists after death
 
     local mainFrame = Instance.new("Frame")
     mainFrame.Size = UDim2.new(0, 220, 0, 40)
@@ -186,7 +183,7 @@ function VioletSyn:createWindow(options)
     padding.PaddingBottom = UDim.new(0, 20)
     padding.Parent = scrollingFrame
 
-    -- Draggable (Mobile + PC)
+    -- Draggable (now works on Mobile too)
     local dragging = false
     local dragStart, startPos
 
@@ -211,7 +208,7 @@ function VioletSyn:createWindow(options)
         end
     end)
 
-    -- Open/Close Animation
+    -- Open/Close
     local isOpen = false
     arrowBtn.MouseButton1Click:Connect(function()
         isOpen = not isOpen
@@ -318,6 +315,7 @@ function VioletSyn:createWindow(options)
         valueLabel.TextSize = 14
         valueLabel.Parent = frame
 
+        -- Initial value setup
         local function updateValue(val)
             val = math.floor(val)
             local rel = (val - min) / (max - min)
@@ -325,11 +323,11 @@ function VioletSyn:createWindow(options)
             valueLabel.Text = tostring(val)
             if callback then callback(val) end
         end
-
         updateValue(default or min)
 
         local dragging = false
 
+        -- Support both mouse and touch
         sliderBar.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                 dragging = true
@@ -342,6 +340,7 @@ function VioletSyn:createWindow(options)
             end
         end)
 
+        -- Smooth dragging for both platforms
         UserInputService.InputChanged:Connect(function(input)
             if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
                 local relX = (input.Position.X - sliderBar.AbsolutePosition.X) / sliderBar.AbsoluteSize.X
@@ -370,7 +369,7 @@ function VioletSyn:createWindow(options)
         btn.MouseButton1Click:Connect(callback or function() end)
     end
 
-    -- Auto Canvas Size
+    -- Auto canvas size
     listLayout.Changed:Connect(function()
         scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 40)
     end)
